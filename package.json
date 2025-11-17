@@ -1,12 +1,8 @@
 {
   "name": "assistente-ia-vercel",
   "version": "1.0.0",
-  "description": "Assistente IA usando Gemini e Vercel",
   "type": "module",
   "dependencies": {
-    "@google/generative-ai": "^0.7.0" 
-  },
-  "scripts": {
-    "start": "echo 'Frontend rodando. Backend está em /api/chat.js'"
+    "@google/generative-ai": "latest"
   }
 }

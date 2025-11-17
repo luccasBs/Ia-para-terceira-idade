@@ -1,31 +1,45 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const model = "gemini-2.5-flash";
+export const config = {
+  runtime: "edge",
+};
 
-export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).send({ error: 'Método não permitido.' });
+export default async function handler(req) {
+  try {
+    if (req.method !== "POST") {
+      return new Response(
+        JSON.stringify({ error: "Método não permitido." }),
+        { status: 405 }
+      );
     }
 
-    const { inputTexto } = req.body;
+    const body = await req.json();
+    const { inputTexto } = body;
 
     if (!inputTexto) {
-        return res.status(400).json({ error: "O texto de entrada é obrigatório." });
+      return new Response(
+        JSON.stringify({ error: "O texto de entrada é obrigatório." }),
+        { status: 400 }
+      );
     }
 
-    try {
-        const result = await ai.models.generateContent({
-            model: model,
-            contents: [{ role: "user", parts: [{ text: inputTexto }] }]
-        });
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-        const resposta = result.text();
+    const result = await model.generateContent(inputTexto);
 
-        return res.status(200).json({ resposta });
+    const resposta = result.response.text();
 
-    } catch (error) {
-        console.error("Erro na Gemini API:", error);
-        return res.status(500).json({ error: "Erro interno do servidor ao processar a IA." });
-    }
+    return new Response(JSON.stringify({ resposta }), { status: 200 });
+
+  } catch (error) {
+    console.error("Erro na Gemini API:", error);
+
+    return new Response(
+      JSON.stringify({
+        error: "Erro interno do servidor ao processar a IA.",
+      }),
+      { status: 500 }
+    );
+  }
 }
