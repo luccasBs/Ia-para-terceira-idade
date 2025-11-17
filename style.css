@@ -1,4 +1,4 @@
-/* Estilos básicos para o site IA */
+/* Estilos básicos para o site Iavô */
 
 body {
   margin: 0;
@@ -60,4 +60,24 @@ button {
 
 button:hover {
   background: #593cdc;
+}
+
+.caixa-resposta {
+    margin-top: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.caixa-resposta strong {
+    color: #4a2cff;
+}
+
+.caixa-resposta em {
+    color: #888;
 }
